@@ -1,0 +1,54 @@
+<div class="container">
+  <h1 class="my-4 text-center text-lg-left">Photo Upload/Capture</h1>
+
+  <% if flash[:success] %>
+    <div class="alert alert-success text-center"><%= flash[:success] %></div>
+  <% end %>
+  <% if flash[:danger] %>
+    <div class="alert alert-danger text-center"><%= flash[:danger] %></div>
+  <% end %>
+
+  <%= form_for(@post) do |f| %>
+    <div class="row">
+
+      <% Post::REQUIRED_FIELDS.each do |field| %>
+
+        <div class="col-lg-6 col-md-6 col-xs-6">
+          <p><%= I18n.t(field) %> <strong style="color: red;">*</strong></p>
+          <%= f.file_field field, accept: "image/jpg, image/png, image/jpeg",class: "d-none", onchange: "setImage(this)" %>
+          <label for="post_<%= field %>">
+            <img id="post_<%= field %>_image" class="img-fluid img-thumbnail" src="/upload.png" alt=<%= I18n.t(field) %>>
+          </label>
+        </div>
+      <% end %>
+
+      <!-- additional -->
+
+      <div class="col-lg-6 col-md-6 col-xs-6">
+        <p>Additional photos/docs</p>
+        <%= f.file_field :additional, class: "d-none" %>
+        <label for="post_additional">
+          <img class="img-fluid img-thumbnail" src="/upload.png" alt="">
+        </label>
+      </div>
+    </div>
+
+    <%= f.hidden_field :damage_overview_two, accept: "image/jpg, image/png, image/jpeg" %>
+    <%= f.submit "Send", class: "btn btn-default" %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  function setImage(e) {
+    var file = e.files[0];
+
+    var fileReader = new FileReader();
+    fileReader.onload = (function(event) {
+      console.log("#" + e.id + "_image");
+      console.log($("#" + e.id + "_image"));
+      $("#" + e.id + "_image")[0].src = event.target.result;
+    });
+
+    fileReader.readAsDataURL(file);
+  }
+</script>
