@@ -41,7 +41,6 @@
 
     var fileReader = new FileReader();
     fileReader.onload = (function(event) {
-      console.log(imageTypes.includes(file.type));
       if(imageTypes.includes(file.type)) {
         $("#" + e.id + "_image")[0].src = event.target.result;
       } else {
