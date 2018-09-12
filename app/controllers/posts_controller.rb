@@ -4,16 +4,12 @@ class PostsController < ApplicationController
   end
 
   def create
-    #raise params.inspect
-    p params
     @post = Post.new(post_params)
 
-    p post_params.inspect
-
     if @post.save
-      flash[:success] = "Successfully created post"
+      flash[:success] = 'Successfully created post'
     else
-      flash[:danger] = @post.errors.full_messages
+      flash[:danger] = @post.errors.full_messages.join(", ")
     end
     redirect_to root_path
   end
@@ -21,7 +17,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    #Post::FILE_FIELDS
-    params.require(:post).permit(:damage_overview_two)
+    params.require(:post).permit(Post::FILE_FIELDS)
   end
 end

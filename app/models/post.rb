@@ -1,23 +1,26 @@
 class Post < ApplicationRecord
-  REQUIRED_FIELDS = [:damage_overview_one, :damage_overview_two, :detail_damage_one, :detail_damage_two].freeze
+  IMAGE_FORMATS = %w(image/jpg image/png image/jpeg)
+  REQUIRED_FIELDS = %i(damage_overview_one damage_overview_two detail_damage_one detail_damage_two)
   FILE_FIELDS = [:additional] + REQUIRED_FIELDS
 
-  # FILE_FIELDS.each do |f|
-  #   has_one_attached f
-  # end
+  FILE_FIELDS.each do |f|
+    has_one_attached f
+  end
 
-  #has_one_attached :damage_overview_one
-  has_one_attached :damage_overview_two
-
-
-  #validate :damage_overview_one_required
+  REQUIRED_FIELDS.each do |f|
+    validate (f.to_s + '_required').to_sym
+    validate (f.to_s + '_format').to_sym
+  end
 
   private
 
-  # def damage_overview_one_required
-  #   unless self.damage_overview_one.attached?
-  #     p "zashlo"
-  #     errors.add(:damage_overview_one, 'required')
-  #   end
-  # end
+  REQUIRED_FIELDS.each do |f|
+    define_method (f.to_s + '_required').to_sym do
+      errors.add(f, 'required') unless self.send(f).attached?
+    end
+
+    define_method (f.to_s + '_format').to_sym do
+      errors.add(f, 'must have image format') if self.send(f).attached? && !self.send(f).content_type.in?(IMAGE_FORMATS)
+    end
+  end
 end

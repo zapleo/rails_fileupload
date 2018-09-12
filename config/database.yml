@@ -12,7 +12,6 @@ development:
   password: 123
 
 test:
-  <<: *default
-  database: rails_fileupload_test
-  username: postgres
-  password: 123
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: db/test.sqlite3
