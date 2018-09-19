@@ -16,10 +16,15 @@ Shoulda::Matchers.configure do |c|
   end
 end
 
+FactoryBot::SyntaxRunner.class_eval do
+  include ActionDispatch::TestProcess
+end
+
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.include FactoryBot::Syntax::Methods
+  config.include Rails.application.routes.url_helpers
 
   config.before(:suite) do
     DatabaseCleaner.clean_with :truncation

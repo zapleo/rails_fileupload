@@ -1,10 +1,10 @@
 RSpec.describe PostsController, type: :controller do
 
-  describe "GET #new" do
+  describe 'GET #new' do
     before { get :new }
 
     it 'returns http success' do
-      expect(response).to have_http_status(:success)
+      expect(response).to be_successful
     end
 
     it 'renders the :new template' do
@@ -12,23 +12,20 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
-    context 'when user add files' do
+  describe 'POST #create' do
+    context 'when user add all files' do
       let(:valid_params) {{ post: attributes_for(:post, :with_all_attachment) }}
 
-      it "returns http success" do
-        post :create, params: valid_params
-        expect(response).to have_http_status(:success)
+      before { post :create, params: valid_params }
+
+      it 'have success flash notice' do
+        expect(flash[:success]).to eq(I18n.t('flash.success'))
+      end
+
+      it 'redirect to root_path' do
+        expect(response).to redirect_to(root_path)
       end
     end
 
-    context 'when user not add files' do
-      let(:invalid_params) {{ post: attributes_for(:post) }}
-
-      it "returns http success" do
-        post :create, params: invalid_params
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
   end
 end

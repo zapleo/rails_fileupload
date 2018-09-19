@@ -7,7 +7,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
-      flash[:success] = 'Successfully created post'
+      flash[:success] = I18n.t('flash.success')
     else
       flash[:danger] = @post.errors.full_messages.join(", ")
     end

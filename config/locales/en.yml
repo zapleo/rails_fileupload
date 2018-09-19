@@ -5,3 +5,5 @@ en:
   detail_damage_one: "Detail of damage 1"
   detail_damage_two: "Detail of damage 2"
   additional_docs: "Additional photos/docs"
+  flash:
+    success: "Successfully created post"
